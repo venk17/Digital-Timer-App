@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import './index.css'
 
 class DigitalTimer extends Component {
@@ -15,7 +15,7 @@ class DigitalTimer extends Component {
   clearTimerInterval = () => clearInterval(this.intervalId)
 
   incrementTimerLimit = () => {
-    const {isTimerRunning, timerLimitInMinutes} = this.state
+    const { isTimerRunning } = this.state
 
     if (!isTimerRunning) {
       this.setState(prevState => ({
@@ -25,7 +25,7 @@ class DigitalTimer extends Component {
   }
 
   decrementTimerLimit = () => {
-    const {isTimerRunning, timerLimitInMinutes} = this.state
+    const { isTimerRunning, timerLimitInMinutes } = this.state
 
     if (!isTimerRunning && timerLimitInMinutes > 1) {
       this.setState(prevState => ({
@@ -44,7 +44,7 @@ class DigitalTimer extends Component {
   }
 
   getElapsedSecondsInTimeFormat = () => {
-    const {timerLimitInMinutes, timeElapsedInSeconds} = this.state
+    const { timerLimitInMinutes, timeElapsedInSeconds } = this.state
     const totalRemainingSeconds =
       timerLimitInMinutes * 60 - timeElapsedInSeconds
     const minutes = Math.floor(totalRemainingSeconds / 60)
@@ -56,24 +56,29 @@ class DigitalTimer extends Component {
   }
 
   startOrPauseTimer = () => {
-    const {isTimerRunning, timeElapsedInSeconds, timerLimitInMinutes} =
-      this.state
-    const isTimerCompleted = timeElapsedInSeconds === timerLimitInMinutes * 60
+    const {
+      isTimerRunning,
+      timeElapsedInSeconds,
+      timerLimitInMinutes,
+    } = this.state
+    const isTimerComplete = timeElapsedInSeconds === timerLimitInMinutes * 60
 
-    if (isTimerCompleted) {
-      this.setState({timeElapsedInSeconds: 0})
+    if (isTimerComplete) {
+      this.setState({ timeElapsedInSeconds: 0 })
     }
     if (isTimerRunning) {
       this.clearTimerInterval()
     } else {
       this.intervalId = setInterval(() => {
-        const {timerLimitInMinutes, timeElapsedInSeconds} = this.state
-        const isTimerCompleted =
-          timeElapsedInSeconds === timerLimitInMinutes * 60
+        const {
+          timerLimitInMinutes: limit,
+          timeElapsedInSeconds: elapsed,
+        } = this.state
+        const isComplete = elapsed === limit * 60
 
-        if (isTimerCompleted) {
+        if (isComplete) {
           this.clearTimerInterval()
-          this.setState({isTimerRunning: false})
+          this.setState({ isTimerRunning: false })
         } else {
           this.setState(prevState => ({
             timeElapsedInSeconds: prevState.timeElapsedInSeconds + 1,
@@ -81,11 +86,11 @@ class DigitalTimer extends Component {
         }
       }, 1000)
     }
-    this.setState(prevState => ({isTimerRunning: !prevState.isTimerRunning}))
+    this.setState(prevState => ({ isTimerRunning: !prevState.isTimerRunning }))
   }
 
   render() {
-    const {isTimerRunning, timerLimitInMinutes} = this.state
+    const { isTimerRunning, timerLimitInMinutes } = this.state
     const labelText = isTimerRunning ? 'Running' : 'Paused'
     const startOrPauseIconUrl = isTimerRunning
       ? 'https://assets.ccbp.in/frontend/react-js/pause-icon-img.png'
